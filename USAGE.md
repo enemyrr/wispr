@@ -9,92 +9,116 @@
 2. **Start Recording**
    - Look for the 🎤 Wispr icon in the status bar (bottom right)
    - Click the icon to start recording
-   - The icon changes to ⏹️ Recording... with orange background
+   - The icon changes to 🔴 Recording... with orange background
 
 3. **Stop and Transcribe**
-   - Click the recording icon again to stop
+   - Click the recording icon again to stop (or wait for auto-timeout)
    - Wait for "Transcribing audio..." progress notification
-   - Choose your preferred action when transcription completes
+   - Click "Copy to Clipboard" when transcription completes
 
 ## Status Bar States
 
 | Icon | State | Description |
 |------|-------|-------------|
 | 🎤 Wispr | Ready | Click to start recording |
-| ⏹️ Recording... | Active | Currently recording, click to stop |
+| 🔴 Recording... | Active | Currently recording, click to stop |
 
-## Output Options
+## Simple Workflow
 
-When transcription completes, you'll see a notification with options:
+When transcription completes, you'll see a notification with the transcribed text:
 
-### 1. Automatic Clipboard Copy
-- Text is **automatically copied** to your clipboard
+### Copy to Clipboard
+- Click "Copy to Clipboard" to copy the transcribed text
 - Paste anywhere with `Cmd/Ctrl + V`
+- Perfect for using voice input in any application
 
-### 2. Insert at Cursor
-- Click "Insert at Cursor" to add text where your cursor is
-- Perfect for adding voice notes to documents or code comments
+## Configuration
 
-### 3. Show Full Text
-- Click "Show Full Text" to open transcription in a new document
-- Useful for longer transcriptions or when you want to edit first
+### Recording Timeout
+Set maximum recording duration to prevent accidental long recordings:
+```json
+{
+    "wispr.recordingTimeout": 120  // 2 minutes (default)
+}
+```
+
+Available options:
+- `30` - 30 seconds
+- `60` - 1 minute  
+- `120` - 2 minutes (default)
+- `300` - 5 minutes
+
+### Language Settings
+Configure language for better transcription accuracy:
+```json
+{
+    "wispr.language": "en"  // English (default)
+}
+```
+
+Supported languages:
+- `en` - English
+- `es` - Spanish
+- `fr` - French
+- `de` - German
+- `it` - Italian
+- `pt` - Portuguese
+- `ru` - Russian
+- `ja` - Japanese
+- `ko` - Korean
+- `zh` - Chinese
 
 ## Best Practices
 
 ### Recording Tips
 - **Speak clearly** and at moderate pace
 - **Minimize background noise** when possible
-- **Keep recordings under 2 minutes** for best performance
-- **Use good microphone** if available
-
-### Language Settings
-Configure language in settings for better accuracy:
-```
-"wispr.language": "en"  // English (default)
-"wispr.language": "es"  // Spanish
-"wispr.language": "fr"  // French
-"wispr.language": "de"  // German
-```
+- **Keep recordings under 2 minutes** (default timeout)
+- **Use VSCode Web** (vscode.dev) for best recording support
+- **Grant microphone permissions** when prompted
 
 ### Common Use Cases
 
-#### 1. Code Comments
-```typescript
-// Start recording, say: "This function calculates the factorial of a number"
-function factorial(n: number): number {
-    // Transcribed: This function calculates the factorial of a number
-    return n <= 1 ? 1 : n * factorial(n - 1);
-}
+#### 1. Quick Voice Notes
+```
+1. 🎤 Click to record
+2. 🗣️ "Remember to update the API documentation before the release"
+3. 🔴 Click to stop
+4. 📋 Click "Copy to Clipboard"
+5. 📝 Paste into your notes app or todo list
 ```
 
-#### 2. Documentation
-Record explanations for complex logic and insert into markdown files.
+#### 2. Code Comments
+```
+1. 🎤 Start recording
+2. 🗣️ "This function validates user input and returns sanitized data"
+3. 🔴 Stop recording
+4. 📋 Copy to clipboard
+5. 📝 Paste as comment in your code
+```
 
-#### 3. Meeting Notes
-Quickly capture voice notes during calls and meetings.
-
-#### 4. Todo Items
-Voice-record tasks and insert them into your task management system.
+#### 3. Documentation
+```
+1. 🎤 Record explanation
+2. 🗣️ Describe complex logic or process
+3. 📋 Copy transcribed text
+4. 📝 Paste into documentation or README
+```
 
 ## Keyboard Shortcuts
 
-While there are no default keyboard shortcuts, you can add them:
+Add custom keyboard shortcuts for quick access:
 
 1. Go to `Cmd/Ctrl + K, Cmd/Ctrl + S` (Keyboard Shortcuts)
 2. Search for "wispr"
-3. Add shortcuts for:
-   - `wispr.toggleRecording`
-   - `wispr.startRecording`
-   - `wispr.stopRecording`
+3. Add shortcut for `wispr.toggleRecording`
 
-Example shortcut: `Cmd/Ctrl + Shift + V` for toggle recording
+Example: Set `Cmd/Ctrl + Shift + V` for toggle recording
 
 ## Command Palette
 
-Access commands via `Cmd/Ctrl + Shift + P`:
+Access via `Cmd/Ctrl + Shift + P`:
 - `Wispr: Toggle Voice Recording`
-- `Wispr: Start Voice Recording`
-- `Wispr: Stop Voice Recording`
 
 ## Configuration Examples
 
@@ -105,51 +129,57 @@ Access commands via `Cmd/Ctrl + Shift + P`:
 }
 ```
 
-### Full Configuration
+### Complete Configuration
 ```json
 {
     "wispr.openaiApiKey": "your-api-key-here",
     "wispr.language": "en",
-    "wispr.model": "whisper-1"
+    "wispr.recordingTimeout": 120
 }
 ```
 
-## Workflow Examples
+## Troubleshooting
 
-### 1. Developer Workflow
-1. 🎤 Click to record
-2. 🗣️ "Add error handling for null values in the user input validation"
-3. ⏹️ Click to stop
-4. ✏️ Click "Insert at Cursor"
-5. ✅ Edit and refine the inserted comment
+### Common Issues
 
-### 2. Writer Workflow
-1. 🎤 Start recording
-2. 🗣️ Speak your thoughts or draft
-3. ⏹️ Stop recording
-4. 📄 Click "Show Full Text"
-5. ✏️ Edit in the new document
-6. 📋 Copy refined text to your main document
+| Problem | Solution |
+|---------|----------|
+| Extension not visible | Look for 🎤 in status bar, restart VSCode |
+| No microphone access | Use VSCode Web, grant browser permissions |
+| API key error | Check `wispr.openaiApiKey` in settings |
+| Poor transcription | Speak clearly, check language setting |
+| Recording stops early | Check timeout setting, default is 2 minutes |
 
-### 3. Meeting Notes Workflow
-1. 🎤 Quick record during meeting
-2. 🗣️ "Action item: Review the quarterly budget proposals by Friday"
-3. ⏹️ Stop and auto-copy to clipboard
-4. 📝 Paste into your notes app or task manager
+### Platform Recommendations
 
-## Troubleshooting Quick Fixes
-
-| Problem | Quick Fix |
-|---------|-----------|
-| No microphone access | Grant permissions in browser settings |
-| API key error | Check settings → `wispr.openaiApiKey` |
-| Poor transcription | Speak more clearly, check language setting |
-| Extension not visible | Look for 🎤 in status bar, restart VSCode if needed |
+- **Best experience**: Use VSCode Web (vscode.dev)
+- **Desktop VSCode**: Limited recording support, use web version
+- **Browser permissions**: Grant microphone access when prompted
 
 ## Pro Tips
 
-- **Use in VSCode Web** (vscode.dev) for best recording support
-- **Keep API key secure** - don't share in public repositories
-- **Test with short recordings** first to verify setup
-- **Use descriptive language** - Whisper understands context well
-- **Pause between sentences** for better accuracy 
+- **Use VSCode Web** for universal microphone support
+- **Test with short recordings** to verify setup  
+- **Speak descriptively** - Whisper understands context well
+- **Pause between sentences** for better accuracy
+- **Keep API key secure** - don't commit to repositories
+- **Monitor usage** - Check OpenAI billing for API costs
+
+## Quick Reference
+
+### Essential Steps
+1. 🎤 **Click** → Start recording
+2. 🗣️ **Speak** → Record your voice  
+3. 🔴 **Click/Wait** → Stop recording
+4. 📋 **Copy** → Get transcribed text
+5. 📝 **Paste** → Use anywhere
+
+### Settings to Configure
+- `wispr.openaiApiKey` - Required for transcription
+- `wispr.language` - For better accuracy in your language
+- `wispr.recordingTimeout` - Prevent accidental long recordings
+
+### Requirements
+- OpenAI API key with Whisper access
+- Internet connection for transcription
+- Microphone access (works best in browser) 

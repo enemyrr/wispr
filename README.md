@@ -6,9 +6,9 @@ A simple and efficient voice-to-text transcription extension for Visual Studio C
 
 - 🎙️ **Voice Recording**: Click the status bar microphone to start/stop recording
 - 🧠 **AI Transcription**: Powered by OpenAI's Whisper-1 model via API
-- 📋 **Smart Clipboard**: Auto-copy transcribed text or manual copy options
-- ⚡ **Quick Actions**: Insert text at cursor or view in new document
+- 📋 **Copy to Clipboard**: Manual copy transcribed text to clipboard
 - 🌍 **Multi-language**: Supports multiple languages for transcription
+- ⏱️ **Auto-timeout**: Automatically stops recording after configured time (30s, 1m, 2m, 5m)
 - ☁️ **Cloud-based**: High accuracy with OpenAI's cloud API
 - 🔧 **Simple Setup**: Just add your API key and start transcribing
 
@@ -49,7 +49,7 @@ npm run compile
 - VSCode 1.74.0 or higher
 - OpenAI API key with access to Whisper API
 - Internet connection for transcription
-- Microphone access
+- Microphone access (works best in VSCode Web)
 
 ## Configuration
 
@@ -63,33 +63,24 @@ Before using the extension, you need to configure your OpenAI API key:
 
 - `wispr.openaiApiKey`: Your OpenAI API key (required)
 - `wispr.language`: Language for transcription (default: "en")
-- `wispr.skipPermissionDialog`: Skip microphone permission dialog (macOS only)
-- `wispr.autoCopyToClipboard`: Automatically copy transcribed text to clipboard (default: true)
+- `wispr.recordingTimeout`: Maximum recording duration in seconds (default: 120)
+  - Options: 30 seconds, 1 minute, 2 minutes, 5 minutes
 
 ## Usage
 
 1. **Start Recording**: Click the microphone icon (🎤 Wispr) in the status bar
-2. **Stop Recording**: Click the recording icon (🔴 Recording...) or click again to stop
-3. **View Results**: 
-   - Text is automatically copied to clipboard (if enabled)
-   - Choose to insert at cursor or view in new document
-   - Notification shows the transcribed text
+2. **Stop Recording**: Click the recording icon (🔴 Recording...) or wait for auto-timeout
+3. **Copy Text**: Click "Copy to Clipboard" in the notification popup
+4. **Use Anywhere**: Paste the transcribed text with `Cmd/Ctrl + V`
 
 ## Commands
 
-- `wispr.toggleRecording`: Toggle recording on/off
-- `wispr.startRecording`: Start voice recording  
-- `wispr.stopRecording`: Stop voice recording
-- `wispr.togglePermissionDialog`: Toggle microphone permission dialog
-- `wispr.toggleAutoCopyClipboard`: Toggle auto-copy to clipboard
-- `wispr.resetPermissionDialog`: Reset microphone permission dialog
-- `wispr.removeInstalledModels`: Remove any previously installed local Whisper models
+- `wispr.toggleRecording`: Toggle recording on/off (only available command)
 
 ## Platform Support
 
-- **VSCode Web**: Full support with browser MediaRecorder API
-- **Desktop VSCode (macOS)**: Native recording support with microphone permissions
-- **Desktop VSCode (Windows/Linux)**: Use VSCode Web for best experience
+- **VSCode Web**: Full support with browser MediaRecorder API (recommended)
+- **Desktop VSCode**: Limited support - use VSCode Web for best experience
 
 ## Development
 
@@ -115,9 +106,9 @@ vsce package
    - Set your API key in VSCode settings under `wispr.openaiApiKey`
    - Ensure your API key has access to Whisper API
 
-2. **"Microphone access denied"**
-   - Grant microphone permissions in your browser (for VSCode Web)
-   - Check system microphone permissions (for desktop VSCode)
+2. **"Voice recording requires running VSCode in a browser"**
+   - Use VSCode Web (vscode.dev) for best recording support
+   - Grant microphone permissions when prompted
 
 3. **"Network error"**
    - Check your internet connection
@@ -127,23 +118,39 @@ vsce package
    - Wait a moment and try again
    - Check your OpenAI usage limits
 
-5. **"Recording not working on desktop"**
-   - Try using VSCode Web (vscode.dev) for universal compatibility
-   - Grant microphone permissions when prompted
+5. **"Recording automatically stopped due to timeout"**
+   - This is normal - adjust timeout in settings if needed
+   - Default timeout is 2 minutes to prevent accidental long recordings
 
 ### Error Messages
 
-- **"Failed to start recording"**: Check microphone permissions
+- **"Failed to start recording"**: Check microphone permissions in browser
 - **"Invalid OpenAI API key"**: Verify your API key in settings
-- **"OpenAI API quota exceeded"**: Check your OpenAI billing and usage
-- **"No audio data recorded"**: Ensure microphone is working and try again
+- **"API quota exceeded"**: Check your OpenAI billing and usage
+- **"No audio data recorded"**: Ensure microphone is working and try speaking
 
-## Migration from Local Mode
+## Simple Workflow
 
-If you previously used local Whisper models, you can:
-1. Run the "Remove Installed Whisper Models" command to clean up local installations
-2. Your transcription will now use the high-quality OpenAI API instead
-3. No more local setup or maintenance required
+1. 🎤 **Click microphone icon** → Start recording
+2. 🗣️ **Speak your content** → Record your voice
+3. 🔴 **Click stop or wait for timeout** → End recording
+4. ⏳ **Wait for transcription** → AI processes your audio
+5. 📋 **Click "Copy to Clipboard"** → Get your text
+6. 📝 **Paste anywhere** → Use transcribed text
+
+## Supported Languages
+
+Configure language in settings for better accuracy:
+- `en` - English (default)
+- `es` - Spanish
+- `fr` - French  
+- `de` - German
+- `it` - Italian
+- `pt` - Portuguese
+- `ru` - Russian
+- `ja` - Japanese
+- `ko` - Korean
+- `zh` - Chinese
 
 ## License
 
