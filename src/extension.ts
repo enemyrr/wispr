@@ -64,30 +64,18 @@ function updateStatusBar(isRecording: boolean) {
 }
 
 function showTranscriptionResult(text: string) {
-    // Auto-copy to clipboard
-    vscode.env.clipboard.writeText(text);
-
-    // Show result with action buttons
+    // Show result with copy button
     const message = text.length > 100 ? text.substring(0, 100) + '...' : text;
-    
+
     vscode.window.showInformationMessage(
-        `Transcribed: "${message}" (copied to clipboard)`,
-        'Insert at Cursor'
+        `Transcribed: "${message}"`,
+        'Copy to Clipboard'
     ).then((choice) => {
-        if (choice === 'Insert at Cursor') {
-            insertTextAtCursor(text);
+        if (choice === 'Copy to Clipboard') {
+            vscode.env.clipboard.writeText(text);
+            vscode.window.showInformationMessage('Copied to clipboard!');
         }
     });
-}
-
-function insertTextAtCursor(text: string) {
-    const editor = vscode.window.activeTextEditor;
-    if (editor) {
-        const position = editor.selection.active;
-        editor.edit(editBuilder => {
-            editBuilder.insert(position, text);
-        });
-    }
 }
 
 export function deactivate() {
