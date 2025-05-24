@@ -1,0 +1,177 @@
+{
+  "name": "wispr-voice-to-text",
+  "displayName": "Wispr Voice to Text",
+  "description": "Quick voice-to-text transcription using OpenAI Whisper from the status bar",
+  "version": "0.0.1",
+  "publisher": "wispr",
+  "author": {
+    "name": "Wispr Team"
+  },
+  "keywords": [
+    "voice",
+    "speech",
+    "transcription",
+    "whisper",
+    "openai",
+    "voice-to-text",
+    "speech-to-text",
+    "recording",
+    "microphone"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/wispr-voice-to-text"
+  },
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other",
+    "Machine Learning"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "wispr.toggleRecording",
+        "title": "Toggle Voice Recording",
+        "icon": "$(mic)"
+      },
+      {
+        "command": "wispr.startRecording",
+        "title": "Start Voice Recording",
+        "icon": "$(mic)"
+      },
+      {
+        "command": "wispr.stopRecording",
+        "title": "Stop Voice Recording",
+        "icon": "$(stop-circle)"
+      },
+      {
+        "command": "wispr.resetPermissionDialog",
+        "title": "Reset Microphone Permission Dialog",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "wispr.togglePermissionDialog",
+        "title": "Toggle Microphone Permission Dialog",
+        "icon": "$(settings-gear)"
+      },
+      {
+        "command": "wispr.toggleAutoCopyClipboard",
+        "title": "Toggle Auto-Copy to Clipboard",
+        "icon": "$(clippy)"
+      },
+      {
+        "command": "wispr.toggleTranscriptionMode",
+        "title": "Toggle Transcription Mode (API/Local)",
+        "icon": "$(globe)"
+      },
+      {
+        "command": "wispr.installLocalWhisper",
+        "title": "Install Local Whisper Dependencies",
+        "icon": "$(cloud-download)"
+      }
+    ],
+    "configuration": {
+      "title": "Wispr Voice to Text",
+      "properties": {
+        "wispr.openaiApiKey": {
+          "type": "string",
+          "default": "",
+          "description": "OpenAI API key for Whisper transcription (required)",
+          "scope": "application"
+        },
+        "wispr.language": {
+          "type": "string",
+          "default": "en",
+          "description": "Language for transcription (e.g., 'en', 'es', 'fr', 'de', 'it', 'pt', 'ru', 'ja', 'ko', 'zh')",
+          "scope": "application"
+        },
+        "wispr.model": {
+          "type": "string",
+          "default": "whisper-1",
+          "description": "Whisper model to use for transcription",
+          "enum": [
+            "whisper-1"
+          ],
+          "scope": "application"
+        },
+        "wispr.skipPermissionDialog": {
+          "type": "boolean",
+          "default": false,
+          "description": "Skip microphone permission dialog after granting once (macOS only)",
+          "scope": "application"
+        },
+        "wispr.autoCopyToClipboard": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically copy transcribed text to clipboard",
+          "scope": "application"
+        },
+        "wispr.transcriptionMode": {
+          "type": "string",
+          "default": "api",
+          "description": "Transcription mode: 'api' for OpenAI API or 'local' for local Whisper model",
+          "enum": [
+            "api",
+            "local"
+          ],
+          "scope": "application"
+        },
+        "wispr.localWhisperModel": {
+          "type": "string",
+          "default": "base",
+          "description": "Local Whisper model size (tiny, base, small, medium, large, turbo)",
+          "enum": [
+            "tiny",
+            "base", 
+            "small",
+            "medium",
+            "large",
+            "turbo"
+          ],
+          "scope": "application"
+        },
+        "wispr.pythonPath": {
+          "type": "string",
+          "default": "python3",
+          "description": "Path to Python executable for local Whisper (e.g., 'python3', '/usr/bin/python3', or path to conda environment)",
+          "scope": "application"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "16.x",
+    "@types/sinon": "^10.0.20",
+    "@types/vscode": "^1.74.0",
+    "@types/wav": "^1.0.4",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "@vscode/test-electron": "^2.3.8",
+    "eslint": "^8.56.0",
+    "glob": "^8.1.0",
+    "mocha": "^10.2.0",
+    "sinon": "^15.2.0",
+    "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "mic": "^2.1.2",
+    "openai": "^4.24.0",
+    "wav": "^1.0.2"
+  }
+}
