@@ -9,6 +9,7 @@ export class WisprVoiceRecorder {
     private mediaRecorder: MediaRecorder | null = null;
     private audioChunks: Blob[] = [];
     private recordingStream: MediaStream | null = null;
+    private recordingTimeout: NodeJS.Timeout | null = null;
 
     private recordingStateChangedEmitter = new vscode.EventEmitter<boolean>();
     private transcriptionResultEmitter = new vscode.EventEmitter<string>();
@@ -35,17 +36,26 @@ export class WisprVoiceRecorder {
             await this.startWebRecording();
             this.isRecording = true;
             this.recordingStateChangedEmitter.fire(true);
+            
+            // Set up timeout
+            this.setupRecordingTimeout();
         } catch (error) {
             this.errorEmitter.fire(`Failed to start recording: ${error}`);
         }
     }
 
-    async stopRecording(): Promise<void> {
+    async stopRecording(isTimeout: boolean = false): Promise<void> {
         if (!this.isRecording) return;
 
         try {
             this.isRecording = false;
             this.recordingStateChangedEmitter.fire(false);
+
+            // Clear timeout
+            if (this.recordingTimeout) {
+                clearTimeout(this.recordingTimeout);
+                this.recordingTimeout = null;
+            }
 
             if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
                 this.mediaRecorder.stop();
@@ -55,9 +65,23 @@ export class WisprVoiceRecorder {
                 this.recordingStream.getTracks().forEach(track => track.stop());
                 this.recordingStream = null;
             }
+
+            // Show timeout message if auto-stopped
+            if (isTimeout) {
+                vscode.window.showWarningMessage('Recording automatically stopped due to timeout');
+            }
         } catch (error) {
             this.errorEmitter.fire(`Failed to stop recording: ${error}`);
         }
+    }
+
+    private setupRecordingTimeout(): void {
+        const config = vscode.workspace.getConfiguration('wispr');
+        const timeoutSeconds = config.get<number>('recordingTimeout', 120);
+        
+        this.recordingTimeout = setTimeout(async () => {
+            await this.stopRecording(true);
+        }, timeoutSeconds * 1000);
     }
 
     private async startWebRecording(): Promise<void> {
@@ -142,6 +166,11 @@ export class WisprVoiceRecorder {
     dispose(): void {
         if (this.isRecording) {
             this.stopRecording();
+        }
+
+        if (this.recordingTimeout) {
+            clearTimeout(this.recordingTimeout);
+            this.recordingTimeout = null;
         }
 
         this.recordingStateChangedEmitter.dispose();

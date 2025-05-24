@@ -55,6 +55,14 @@
           "default": "en",
           "description": "Language for transcription (e.g., 'en', 'es', 'fr', 'de', 'it', 'pt', 'ru', 'ja', 'ko', 'zh')",
           "scope": "application"
+        },
+        "wispr.recordingTimeout": {
+          "type": "number",
+          "default": 120,
+          "enum": [30, 60, 120, 300],
+          "enumDescriptions": ["30 seconds", "1 minute", "2 minutes", "5 minutes"],
+          "description": "Maximum recording duration in seconds (auto-stops recording)",
+          "scope": "application"
         }
       }
     }
